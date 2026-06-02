@@ -33,19 +33,17 @@ pipeline {
                 sh 'cd $PROJECT_DIR && docker build -t proshop-frontend:latest frontend/'
             }
         }
-
         stage('Deploy') {
-            steps {
+           steps {
                 echo '===== Deploiement ====='
-                sh '''
-                    cd $PROJECT_DIR
-                    sh 'docker rm -f proshop-mongo || true'
-                    sh 'docker compose down --remove-orphans'
-                    sh 'docker compose up -d'
-                '''
-            }
-        }
-
+                    sh '''
+                         cd $PROJECT_DIR
+                         docker rm -f proshop-mongo || true
+                         docker compose down --remove-orphans
+                         docker compose up -d
+                    '''
+               }
+          }
         stage('Verify') {
             steps {
                 echo '===== Verification ====='
