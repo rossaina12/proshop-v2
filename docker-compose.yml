@@ -44,16 +44,13 @@ services:
       - proshop-network
 
   prometheus:
-    image: prom/prometheus:latest
-    container_name: proshop-prometheus
-    restart: always
-    ports:
+   image: prom/prometheus:latest
+   container_name: proshop-prometheus
+   restart: always
+   ports:
       - "9090:9090"
-    volumes:
-      - /workspace/proshop-v2/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    networks:
+   networks:
       - proshop-network
-
   grafana:
     image: grafana/grafana:latest
     container_name: proshop-grafana
