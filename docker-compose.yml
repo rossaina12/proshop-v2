@@ -48,9 +48,9 @@ services:
     container_name: proshop-prometheus
     restart: always
     ports:
-       - "9090:9090"
+      - "9090:9090"
     volumes:
-      - /var/jenkins_home/workspace/ProShop-CI-CD/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/etc/prometheus
     networks:
       - proshop-network
 

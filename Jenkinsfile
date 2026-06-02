@@ -39,31 +39,23 @@ pipeline {
             }
         }
 
- stage('Deploy') {
+stage('Deploy') {
     steps {
         echo '===== Deploiement ====='
         sh '''
             cd $WORKSPACE
-
-            echo "===== DEBUG PROMETHEUS ====="
-            pwd
-            ls -la prometheus.yml
-            file prometheus.yml || true
-
-            echo "===== TEST COMPOSE ====="
-            cat docker-compose.yml
-
-            docker compose config
-
             docker compose down --remove-orphans || true
-
             docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
-
+            docker volume rm proshop-ci-cd_prometheus-data 2>/dev/null || true
+            docker volume create proshop-ci-cd_prometheus-data
+            docker run --rm \
+                -v $WORKSPACE/prometheus.yml:/prometheus.yml \
+                -v proshop-ci-cd_prometheus-data:/etc/prometheus \
+                busybox cp /prometheus.yml /etc/prometheus/prometheus.yml
             docker compose up -d
         '''
     }
 }
-
         stage('Verify') {
             steps {
                 echo '===== Verification ====='
