@@ -39,8 +39,9 @@ pipeline {
                 echo '===== Deploiement ====='
                 sh '''
                     cd $PROJECT_DIR
-                    docker compose down || true
-                    docker compose up -d
+                    sh 'docker rm -f proshop-mongo || true'
+                    sh 'docker compose down --remove-orphans'
+                    sh 'docker compose up -d'
                 '''
             }
         }
