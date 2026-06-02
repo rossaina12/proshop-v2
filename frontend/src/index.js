@@ -1,3 +1,6 @@
+
+/* Demo CI/CD automatique - Tahiri Rossaina & Hamza Laztouti */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/styles/bootstrap.custom.css';
