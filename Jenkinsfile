@@ -40,19 +40,17 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                echo '===== Deploiement ====='
-                sh '''
-                    cd $WORKSPACE
-                    pwd
-                    ls -la prometheus.yml
-                    docker compose down --remove-orphans || true
-                    docker rm -f proshop-prometheus proshop-grafana || true
-                    docker compose up -d
-                '''
-            }
+    steps {
+        echo '===== Deploiement ====='
+        sh '''
+            cd $WORKSPACE
+            docker compose down --remove-orphans || true
+            docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana || true
+            docker compose up -d
+        '''
+          }
+          
         }
-
         stage('Verify') {
             steps {
                 echo '===== Verification ====='
