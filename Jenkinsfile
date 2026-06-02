@@ -52,7 +52,7 @@ pipeline {
                          docker compose up -d
                     '''
                }
-          }
+}
 
         stage('Verify') {
             steps {
