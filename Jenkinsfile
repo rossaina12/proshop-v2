@@ -5,7 +5,10 @@ pipeline {
         stage('Informations') {
             steps {
                 echo '===== Informations ====='
-                sh 'pwd && ls -la /workspace/proshop-v2'
+                sh '''
+                    pwd
+                    ls -la
+                '''
             }
         }
 
@@ -19,31 +22,45 @@ pipeline {
         stage('Build Backend') {
             steps {
                 echo '===== Build Backend ====='
-                sh 'cd /workspace/proshop-v2 && docker build -t proshop-backend:latest -f backend/Dockerfile .'
+                sh '''
+                    cd $WORKSPACE
+                    docker build -t proshop-backend:latest -f backend/Dockerfile .
+                '''
             }
         }
 
         stage('Build Frontend') {
             steps {
                 echo '===== Build Frontend ====='
-                sh 'cd /workspace/proshop-v2 && docker build -t proshop-frontend:latest frontend/'
+                sh '''
+                    cd $WORKSPACE
+                    docker build -t proshop-frontend:latest frontend/
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
                 echo '===== Deploiement ====='
-                sh 'cd /workspace/proshop-v2 && docker compose down --remove-orphans || true'
-                sh 'docker rm -f proshop-prometheus proshop-grafana || true'
-                sh 'cd /workspace/proshop-v2 && docker compose up -d'
+                sh '''
+                    cd $WORKSPACE
+                    pwd
+                    ls -la prometheus.yml
+                    docker compose down --remove-orphans || true
+                    docker rm -f proshop-prometheus proshop-grafana || true
+                    docker compose up -d
+                '''
             }
         }
 
         stage('Verify') {
             steps {
                 echo '===== Verification ====='
-                sh 'docker ps'
-                sh 'cd /workspace/proshop-v2 && docker compose ps'
+                sh '''
+                    docker ps
+                    cd $WORKSPACE
+                    docker compose ps
+                '''
             }
         }
     }
