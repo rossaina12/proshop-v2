@@ -39,24 +39,29 @@ pipeline {
             }
         }
 
-          stage('Deploy') {
-               steps {
-                    echo '===== Deploiement ====='
-                    sh '''
-                         cd $WORKSPACE
-                         echo "===== TEST COMPOSE ====="
-                         cat docker-compose.yml
+ stage('Deploy') {
+    steps {
+        echo '===== Deploiement ====='
+        sh '''
+            cd $WORKSPACE
 
-                         docker compose config
+            echo "===== DEBUG PROMETHEUS ====="
+            pwd
+            ls -la prometheus.yml
+            file prometheus.yml || true
 
+            echo "===== TEST COMPOSE ====="
+            cat docker-compose.yml
 
-                         docker compose down --remove-orphans || true
+            docker compose config
 
-                         docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
+            docker compose down --remove-orphans || true
 
-                         docker compose up -d
-                    '''
-               }
+            docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
+
+            docker compose up -d
+        '''
+    }
 }
 
         stage('Verify') {
