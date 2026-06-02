@@ -39,19 +39,20 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo '===== Deploiement ====='
-                sh '''
-                    cd $WORKSPACE
-                    docker compose down --remove-orphans || true
-                    docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
-                    docker volume create proshop-ci-cd_prometheus-data || true
-                    docker run --rm -v proshop-ci-cd_prometheus-data:/dest -v $WORKSPACE:/src alpine sh -c "cp /src/prometheus.yml /dest/prometheus.yml"
-                    docker compose up -d
-                '''
-            }
-        }
+          stage('Deploy') {
+               steps {
+                    echo '===== Deploiement ====='
+                    sh '''
+                         cd $WORKSPACE
+
+                         docker compose down --remove-orphans || true
+
+                         docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
+
+                         docker compose up -d
+                    '''
+               }
+          }
 
         stage('Verify') {
             steps {
