@@ -50,7 +50,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - prometheus-data:/etc/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - proshop-network
 
@@ -77,4 +77,3 @@ networks:
 volumes:
   grafana-data:
   mongo-data:
-  prometheus-data:
