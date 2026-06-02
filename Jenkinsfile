@@ -44,6 +44,11 @@ pipeline {
                     echo '===== Deploiement ====='
                     sh '''
                          cd $WORKSPACE
+                         echo "===== TEST COMPOSE ====="
+                         cat docker-compose.yml
+
+                         docker compose config
+
 
                          docker compose down --remove-orphans || true
 
