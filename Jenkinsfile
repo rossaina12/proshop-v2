@@ -1,14 +1,17 @@
 pipeline { 
     agent any 
     stages { 
-        stage('Deploy') { 
-          steps { 
-               sh ''' 
-               cd /workspace/proshop-v2 
-               docker compose down
-               docker compose up -d --build 
-               ''' 
-               } 
-          } 
+       stage('Deploy') {
+            steps {
+                echo '===== Deploiement ====='
+                sh '''
+                    cd $PROJECT_DIR
+                    docker compose down --remove-orphans || true
+                    docker stop proshop-prometheus proshop-grafana || true
+                    docker rm proshop-prometheus proshop-grafana || true
+                    docker compose up -d
+                '''
+           }
+        }
      }       
 }
