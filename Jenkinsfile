@@ -48,10 +48,20 @@ stage('Deploy') {
             docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
             docker volume rm proshop-ci-cd_prometheus-data 2>/dev/null || true
             docker volume create proshop-ci-cd_prometheus-data
-            docker run --rm \
-                -v $WORKSPACE/prometheus.yml:/prometheus.yml \
-                -v proshop-ci-cd_prometheus-data:/etc/prometheus \
-                busybox cp /prometheus.yml /etc/prometheus/prometheus.yml
+            docker run --rm -v proshop-ci-cd_prometheus-data:/etc/prometheus busybox sh -c "cat > /etc/prometheus/prometheus.yml << 'EOF'
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: [localhost:9090]
+
+  - job_name: docker
+    static_configs:
+      - targets: [host.docker.internal:9323]
+EOF"
             docker compose up -d
         '''
     }
