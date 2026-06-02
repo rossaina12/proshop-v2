@@ -40,21 +40,23 @@ pipeline {
         }
 
         stage('Deploy') {
-    steps {
-        echo '===== Deploiement ====='
-        sh '''
-            cd $WORKSPACE
-            docker compose down --remove-orphans || true
-            docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana || true
-            docker compose up -d
-        '''
-          }
-          
+            steps {
+                echo '===== Deploiement ====='
+                sh '''
+                    cd $WORKSPACE
+                    docker rm -f proshop-mongo proshop-backend proshop-frontend proshop-prometheus proshop-grafana 2>/dev/null || true
+                     docker run --rm -v /var/jenkins_home/workspace/ProShop-CI-CD/prometheus.yml:/src/prometheus.yml -v proshop-ci-cd_prometheus-data:/dest alpine cp /src/prometheus.yml /dest/prometheus.yml
+                    docker compose up -d
+                    docker compose up -d
+                '''
+            }
         }
+
         stage('Verify') {
             steps {
                 echo '===== Verification ====='
                 sh '''
+                    sleep 10
                     docker ps
                     cd $WORKSPACE
                     docker compose ps
