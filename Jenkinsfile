@@ -34,16 +34,16 @@ pipeline {
             }
         }
         stage('Deploy') {
-           steps {
+            steps {
                 echo '===== Deploiement ====='
-                    sh '''
-                         cd $PROJECT_DIR
-                         docker rm -f proshop-mongo || true
-                         docker compose down --remove-orphans
-                         docker compose up -d
-                    '''
+                sh '''
+                    cd $PROJECT_DIR
+                    docker rm -f proshop-mongo proshop-prometheus proshop-grafana proshop-backend proshop-frontend || true
+                    docker compose down --remove-orphans
+                    docker compose up -d
+               '''
                }
-          }
+       }
         stage('Verify') {
             steps {
                 echo '===== Verification ====='
