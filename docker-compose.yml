@@ -50,7 +50,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /workspace/proshop-v2/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
       - proshop-network
 
