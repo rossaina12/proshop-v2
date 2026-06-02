@@ -4,6 +4,6 @@ stage('Deploy') {
        cd /workspace/proshop-v2 
        docker compose down
        docker compose up -d --build 
-''' 
+           ''' 
      } 
 } 
